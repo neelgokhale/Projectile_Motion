@@ -12,3 +12,5 @@ if __name__ == "__main__":
     file_name = 'projectile_path1'
 
     plot_function(path[1], path[2], 'd_x(t)', 'd_y(t)', file_name)
+
+    print(path[2])
