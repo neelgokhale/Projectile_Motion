@@ -92,7 +92,8 @@ class Particle:
             if conditional_stop:
                 self.time_at_touchdown(y_stop_pos, acceleration)
                 if (self.touchdown_time - time_array[i]) < 0.01:
-                    pos_y_array[[i, len(time_array)]] = y_stop_pos
+                    pos_y_array[i:] = y_stop_pos
+
                     break
     
         projectile_path = [time_array, pos_x_array, pos_y_array]
