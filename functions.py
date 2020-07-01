@@ -2,7 +2,12 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
-def plot_function(x_vals: list, y_vals: list, plt_xlbl: str, plt_ylbl: str, plt_name: str, plt_size: tuple=(16, 8), plt_path: str='img/'):
+def plot_function(x_vals: list, y_vals: list, plt_xlbl: str, plt_ylbl: str, plt_name: str=None, plt_size: tuple=(16, 8), plt_path: str='img/'):
+
+    if plt_name == None:
+        plt_name = plt_xlbl + "_vs_" + plt_ylbl
+    else:
+        plt_name = plt_name
 
     plt.figure(figsize=plt_size)
     plt.xlabel(plt_xlbl)
@@ -11,23 +16,25 @@ def plot_function(x_vals: list, y_vals: list, plt_xlbl: str, plt_ylbl: str, plt_
     plt.plot(x_vals, y_vals)
     plt.grid(True)
     plt.savefig(plt_path + plt_name + '.png')
+    plt.show()
 
 class Particle:
 
     """
+
     Particle class, defining initial x and y position, velocity, angle and mass
     Default units: [Velocity: m/s, Angle: deg, Position: m, Mass: kg]
     
     """
 
-    def __init__(self, initial_y_pos: float, initial_vel: float, initial_ang: float, m: float, vel_dtype='m/s', ang_dtype='deg', pos_dtype='m'):
+    def __init__(self, initial_y_pos: float, initial_x_pos: float, initial_vel: float, initial_ang: float, m: float, vel_dtype='m/s', ang_dtype='deg', pos_dtype='m'):
 
         self.initial_y_pos = initial_y_pos
+        self.initial_x_pos = initial_x_pos
         self.initial_vel = initial_vel
         self.initial_ang = initial_ang
         self.m = m
-        self.pos_y = 0
-        self.y_pos_max = 0
+        self.y_pos_max = None
         self.touchdown_time = None
 
     def calculate_initial_momentum(self):
@@ -48,6 +55,13 @@ class Particle:
         self.y_pos = self.initial_y_pos + velocity_y * time + 0.5 * acceleration * (time ** 2)
 
         return self.y_pos
+
+    def current_pos_x(self, time: float):
+
+        velocity_x = self.velocity_comps(self.initial_vel, self.initial_ang)[0]
+        self.x_pos = self.initial_x_pos + velocity_x * time
+
+        return self.x_pos
 
     def current_kinetic_energy(self, time: float, acceleration: float):
 
